@@ -1,7 +1,8 @@
 import numpy as np
 import time
 import copy
-
+#Leonardo Vanzin
+#Mateus Karvat Camara
 class Tree:
     # classe Tree cria um nó quando é chamada
     def __init__(self, data):
@@ -84,22 +85,43 @@ def inicia_arvore():
     
     return raiz
 
+def exibir_respostas_validas(respostas_validas): #função para organizar as listas para imprimir bonitinho
+    for resposta in respostas_validas:#percorre as lista que estao em respostas_validas
+        resposta_para_printar = [] #cria uma lista para cada lista de caminhos validos
+        for nozinho in resposta:#percorre  o conteudo das lista que estao dentro da lista respostas_validas
+            resposta_para_printar.append(nozinho.data) #coloca o valor de cada no na lista, isso porque o conteudo das listas eram os endereços dos nos
+        print(resposta_para_printar) #imprime os caminhos validos
+
 def busca_em_profundidade_preliminar(no_inicial):
-    pilha = []
-    busca_em_profundidade_recursivo(no_inicial, pilha)
+    caminhos=[0] #coloca o valor da posicao zero de respostas invalidas como 0 incialmente, 
+                 #foi utilizado uma lista pois ao passar uma variavel como parametro para uma funcao é somente passado o valor dela e nao a referencia
+    pilha = [] #cria a pilha que vai ser utilizada na busca em profundidade
+    respostas_validas = [] #cria lista que sera armazenado os caminhos validos
+    busca_em_profundidade_recursivo(no_inicial, pilha, respostas_validas, caminhos)
+    print("Número de respostas válidas:",len(respostas_validas)) #imprime o numero de listas que que estao dentro de respostas_validas 
+    print("Número de respostas inválidas:", caminhos[0]) #imprime a primeira posicao da lista, que contem o numero de caminhos invalidos
+    print("Caminhos válidos:")
+    exibir_respostas_validas(respostas_validas) #chama funcao para imprimir os caminhos validos
 
-def busca_em_profundidade_recursivo(no_referencia, pilha):
-    pilha.append(no_referencia)
-    for no_filho in no_referencia.children:
-        busca_em_profundidade_recursivo(no_filho,pilha)
-    if len(pilha)>8:
-        print(f"Tamanho da pilha: {len(pilha)}")
-        pilha_para_printar = []
-        for nozinho in pilha[1:]:
-            pilha_para_printar.append(nozinho.data)
-        print(pilha_para_printar)
-        print("-"*10)
-    pilha.pop(pilha.index(no_referencia))
+def busca_em_profundidade_recursivo(no_referencia, pilha, respostas_validas, caminhos):
+    pilha.append(no_referencia) #passa o no inicial
+    for no_filho in no_referencia.children: #percorre a arvore, indo de filho em filho
+        busca_em_profundidade_recursivo(no_filho, pilha, respostas_validas, caminhos)
+    if (len(pilha)>9) : #seleciona os caminhos que sao maior que 9, porque sao os caminhos que possuem os 8 niveis
+        if pilha[1:-1] not in respostas_validas: #verifica se ja existe um dentro da lista, para evitar respostas repetidas
+            respostas_validas.append(pilha[1:-1]) #coloca na lista de respostas validas tirando o no raiz e o ultimo filho, o ultimo filho é tirado pois o pai dele ja é o 8 nivel
+    elif (len(pilha)==9 and pilha[-1].data==63):#como o 63 é o ultimo no possivel ele nao tem filho, mas tem casos em que o 63 é valido para a resposta, 
+                                                #assim verificamos se no 8 nivel tem o 63 e com isso colocamos ele na lista
+        if pilha[1:] not in respostas_validas: #neste caso como o 63 é o ultimo nivel e ele nao possui filho, tiramos somente o no raiz
+            respostas_validas.append(pilha[1:])
+    else:
+        caminhos[0]+=1 #contabiliza quantos caminhos invalidos foram encontrados na primeira posicao da lista
+    pilha.pop(pilha.index(no_referencia)) #seguindo o algoritmo da busca em profundidade elimina-se o no da pilha
 
+T0=time.time()# pega o tempo antes de inciar a arvore
 raiz = inicia_arvore()
+T1=time.time()# pega o tempo depois de inciar a arvore e antes de realizar as busca
 busca_em_profundidade_preliminar(raiz)
+T2=time.time()# pega o tempo depois da busca
+print(f"Tempo para criar a árvore: {round(T1-T0,3)} segundos") #calcula o tempo gasto durante a criação da arvore
+print(f"Tempo para busca em profundidade: {round(T2-T1,3)} segundos") #calcula o tempo gasto durante a execução da busca
