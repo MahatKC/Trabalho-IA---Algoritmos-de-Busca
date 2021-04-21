@@ -372,4 +372,4 @@ else:
 if menor_custo_sa>0:
     print(f"A busca em profundidade foi {speedup_prof_sa} vezes mais rápida que a têmpera simulada e chegou a todas as respostas corretas, enquanto a têmpera simulada não chegou em nenhuma.")
 else:
-        print(f"A busca em profundidade foi {speedup_prof_sa} vezes mais rápida que a têmpera simulada e chegou a todas as respostas corretas, enquanto a têmpera simulada chegou a apenas uma.")
+    print(f"A busca em profundidade foi {speedup_prof_sa} vezes mais rápida que a têmpera simulada e chegou a todas as respostas corretas, enquanto a têmpera simulada chegou a apenas uma.")
