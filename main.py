@@ -308,11 +308,14 @@ def Perturba(S):
 
     return S
 
+print("Programa iniciado. Árvore em construção.")
+
 T0=time.time()# pega o tempo antes de inciar a arvore
 raiz = inicia_arvore()
 T1=time.time()# pega o tempo depois de inciar a arvore e antes de realizar as busca
 busca_em_profundidade_preliminar(raiz)
 T2=time.time()# pega o tempo depois da busca
+
 #o algoritmo de têmpera simulada obteve desempenho ruim, logo é executado múltiplas vezes
 for i in range(100):
     #cria-se listas vazias para armazenar o custo e estado obtido após cada execução do algoritmo
@@ -325,10 +328,13 @@ for i in range(100):
     #armazena-se o custo e estado da presente execução do algoritmo nas listas
     custos.append(custo)
     estados.append(S)
+
 T3=time.time()#tempo após tempera simulada
 menor_custo_sa = min(custos)
 melhor_estado_sa = estados[custos.index(min(custos))]
-print(f"Melhor custo obtido pela têmpera simulada: {menor_custo_sa}. Estado: {melhor_estado_sa}") #exibe o melhor estado obtido na tempera simulada
+print(f"Melhor custo obtido pela têmpera simulada: {menor_custo_sa}") #exibe o melhor estado obtido na tempera simulada
+print(f"Estado com menor custo na têmpera simulada: {melhor_estado_sa}")
+
 #por critério de comparação, testa-se uma busca totalmente aleatória similar à tempera simulada
 T4=time.time()#tempo antes da busca aleatória
 for i in range(100):
@@ -340,10 +346,12 @@ for i in range(100):
 
     custos_random.append(custo_random)
     estados_random.append(S_random)
+
 T5=time.time()#tempo após busca aleatória
 menor_custo_rand = min(custos_random)
 melhor_estado_rand = estados_random[custos_random.index(min(custos_random))]
-print(f"Melhor custo obtido pela busca aleatória: {menor_custo_rand}. Estado: {melhor_estado_rand}") #exibe o melhor estado obtido na busca aleatória
+print(f"Melhor custo obtido pela busca aleatória: {menor_custo_rand}") #exibe o melhor estado obtido na busca aleatória
+print(f"Estado com menor custo na têmpera simulada: {melhor_estado_rand}")
 
 t_random = T5-T4
 t_prof = T2-T1
@@ -356,12 +364,12 @@ print(f"Tempo para busca em profundidade: {round(t_prof,3)} segundos") #calcula 
 print(f"Tempo para execução da têmpera simulada: {round(t_sa,3)} segundos")
 print(f"Tempo para execução da busca aleatória: {round(t_random,3)} segundos")
 if menor_custo_rand==menor_custo_sa:
-    print(f"A busca aleatória foi {speedup_sa_rand} mais rápida e obteve o mesmo custo que a têmpera simulada.")
+    print(f"A busca aleatória foi {speedup_sa_rand} vezes mais rápida e obteve o mesmo custo que a têmpera simulada.")
 elif abs(menor_custo_rand-menor_custo_sa)==10:
-    print(f"A busca aleatória foi {speedup_sa_rand} mais rápida e obteve custo similar à têmpera simulada.")
+    print(f"A busca aleatória foi {speedup_sa_rand} vezes mais rápida e obteve custo similar à têmpera simulada.")
 else:
-    print(f"A busca aleatória foi {speedup_sa_rand} mais rápida que a têmpera simulada.")
+    print(f"A busca aleatória foi {speedup_sa_rand} vezes mais rápida que a têmpera simulada.")
 if menor_custo_sa>0:
-    print(f"A busca em profundidade foi {speedup_prof_sa} mais rápida que a têmpera simulada e chegou a todas as respostas corretas, enquanto a têmpera simulada não chegou em nenhuma.")
+    print(f"A busca em profundidade foi {speedup_prof_sa} vezes mais rápida que a têmpera simulada e chegou a todas as respostas corretas, enquanto a têmpera simulada não chegou em nenhuma.")
 else:
-        print(f"A busca em profundidade foi {speedup_prof_sa} mais rápida que a têmpera simulada e chegou a todas as respostas corretas, enquanto a têmpera simulada chegou a apenas uma.")
+        print(f"A busca em profundidade foi {speedup_prof_sa} vezes mais rápida que a têmpera simulada e chegou a todas as respostas corretas, enquanto a têmpera simulada chegou a apenas uma.")
